@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/RotatorToolScene.unity
+    guid: 799da033cf45e624eaf538f66d056724
   m_configObjects: {}
