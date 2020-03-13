@@ -322,21 +322,24 @@ namespace com.technical.test
         void Display_Rotator(Rotator rotator)
         {
             GUILayout.BeginVertical("box");
-            SerializedObject so = new SerializedObject (rotator);
-            SerializedProperty identifierProperty = so.FindProperty("_identifier");
-            SerializedProperty timeBeforeStoppingProperty = so.FindProperty("_timeBeforeStoppingInSeconds");
-            SerializedProperty reverseRotationProperty = so.FindProperty("_shouldReverseRotation");
-            SerializedProperty rotationsSettingsProperty = so.FindProperty("_rotationsSettings");
-            EditorGUIUtility.labelWidth = 200;
-            EditorGUILayout.LabelField(rotator.gameObject.name,textBold,GUILayout.ExpandWidth(false),GUILayout.Width(175));
-            EditorGUIUtility.labelWidth = 80;
-            EditorGUILayout.PropertyField(identifierProperty, false,GUILayout.ExpandWidth(false),GUILayout.Width(255));
-            EditorGUIUtility.labelWidth = 200;
-            EditorGUILayout.PropertyField(timeBeforeStoppingProperty, false,GUILayout.ExpandWidth(false));
-            EditorGUIUtility.labelWidth = 170;
-            EditorGUILayout.PropertyField(reverseRotationProperty, false,GUILayout.ExpandWidth(false));
-            EditorGUILayout.PropertyField(rotationsSettingsProperty,true,GUILayout.ExpandWidth(false)); 
-            EditorGUIUtility.labelWidth = 0;
+            if(rotator != null)
+            {
+                SerializedObject so = new SerializedObject (rotator);
+                SerializedProperty identifierProperty = so.FindProperty("_identifier");
+                SerializedProperty timeBeforeStoppingProperty = so.FindProperty("_timeBeforeStoppingInSeconds");
+                SerializedProperty reverseRotationProperty = so.FindProperty("_shouldReverseRotation");
+                SerializedProperty rotationsSettingsProperty = so.FindProperty("_rotationsSettings");
+                EditorGUIUtility.labelWidth = 200;
+                EditorGUILayout.LabelField(rotator.gameObject.name,textBold,GUILayout.ExpandWidth(false),GUILayout.Width(175));
+                EditorGUIUtility.labelWidth = 80;
+                EditorGUILayout.PropertyField(identifierProperty, false,GUILayout.ExpandWidth(false),GUILayout.Width(255));
+                EditorGUIUtility.labelWidth = 200;
+                EditorGUILayout.PropertyField(timeBeforeStoppingProperty, false,GUILayout.ExpandWidth(false));
+                EditorGUIUtility.labelWidth = 170;
+                EditorGUILayout.PropertyField(reverseRotationProperty, false,GUILayout.ExpandWidth(false));
+                EditorGUILayout.PropertyField(rotationsSettingsProperty,true,GUILayout.ExpandWidth(false)); 
+                EditorGUIUtility.labelWidth = 0;
+            }
             GUILayout.EndVertical();
             
         }
