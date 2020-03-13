@@ -8,7 +8,7 @@ namespace com.technical.test
     [CustomPropertyDrawer(typeof(RotationSettings))]
     public class RotationSettingPropertyDrawer : PropertyDrawer
     {
-        public Dictionary<string, bool> unfold = new Dictionary<string, bool>();
+        public Dictionary<string, bool> unfold = new Dictionary<string, bool>();            //Storing the state of fold else they'll all fold out/in all at once
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             position.height = 16;

@@ -22,13 +22,15 @@ namespace com.technical.test
         Vector2 scrollbarPosition,selectedRotatorsScrollbarPosition;
         GUIStyle titleCenter = new GUIStyle();
         GUIStyle textBold = new GUIStyle();
+        GUIStyle button = new GUIStyle();
                         
         [MenuItem("Window/Custom/Rotators Value Setter")]
         public static void ShowWindow()
         {
             GetWindow<RotatorsValueSetter>(false, "Rotators Value Setter", true);
         }
-        void OnEnable(){
+        void OnEnable()
+        {
             titleCenter.alignment = TextAnchor.UpperCenter;
             titleCenter.fontSize = 17;
             titleCenter.fontStyle = FontStyle.Bold;
@@ -36,22 +38,25 @@ namespace com.technical.test
             rotatorToEdit = GetSelectedRotators(Selection.gameObjects);
         }
 
-        void Update(){
+        void Update()
+        {
             rotatorToEdit = GetSelectedRotators(Selection.gameObjects);
         }
         void OnGUI()
         {
+            GUILayout.Space(15);
             scrollbarPosition = EditorGUILayout.BeginScrollView(scrollbarPosition);
-            
             DispalySelection();
-            GUILayout.Space(20);
-            DisplayElements();
-            GUILayout.Space(20);
-            Display_SelectedRotators();
+            GUILayout.Space(15);
+            DisplayEditor();
+            GUILayout.Space(15);
+            DisplaySelectedRotators();
             EditorGUILayout.EndScrollView();
+            GUILayout.Space(15);
             Repaint();
         }
-        Rotator[] GetSelectedRotators(GameObject[] gameObjects){
+        Rotator[] GetSelectedRotators(GameObject[] gameObjects)
+        {
             List<Rotator> selectedRotators = new List<Rotator>();
             foreach(GameObject gameObject in gameObjects)
             {
@@ -64,17 +69,20 @@ namespace com.technical.test
             }
             return selectedRotators.ToArray();
         }
-        void SearchRotatorInChild(Transform parent,List<Rotator> rotators){
-            foreach(Transform child in parent){
+        void SearchRotatorInChild(Transform parent,List<Rotator> rotators)
+        {
+            foreach(Transform child in parent)
+            {
                 Rotator rotator = child.GetComponent<Rotator>();
-                if(rotator != null){
+                if(rotator != null)
+                {
                     rotators.Add(rotator);
                 }
                 SearchRotatorInChild(child,rotators);
 
             }
         }
-        void DispalySelection()
+        void DispalySelection()                                                     
         {
             GUILayout.BeginVertical("box");
             EditorGUILayout.LabelField("ROTATORS TO EDIT",titleCenter);
@@ -88,7 +96,7 @@ namespace com.technical.test
             
             
         }
-        void DisplayElements()
+        void DisplayEditor()
         {
             GUILayout.BeginVertical("box");
             EditorGUILayout.LabelField("EDITOR",titleCenter);
@@ -99,7 +107,9 @@ namespace com.technical.test
             EditorDisplay_RotationsSettings();
             GUILayout.Space(10);
             GUILayout.EndVertical();
-            GUILayout.Space(10);
+            GUILayout.Space(7);
+            EditorValidateChanges();
+            GUILayout.Space(7);
             GUILayout.EndVertical();
         }
         void EditorDisplay_Identifier()
@@ -130,32 +140,34 @@ namespace com.technical.test
         {
             GUILayout.BeginHorizontal();
             EditorDisplay_ToggleHandler();
-            
-
             EditorGUIUtility.labelWidth = 220;
             foldoutValue = EditorGUILayout.Foldout(foldoutValue,"Rotations settings");
             GUILayout.EndHorizontal();
-            if(foldoutValue){
+            if(foldoutValue)
+            {
                 EditorGUI.indentLevel++;
                 EditorDisplay_ObjectToRotate();
                 EditorDisplay_AngleRotation();
                 EditorDisplay_TimeToRotate();
                 EditorGUI.indentLevel--;
             }
-            EditorValidateChanges();
         }
-        void EditorDisplay_ToggleHandler(){
-            if((toggleObjectToRotate || toggleAngleRotation || toggleTimeToRotate) && !(toggleObjectToRotate && toggleAngleRotation && toggleTimeToRotate)){            //if one sub toogle is set to true show mixed value
+        void EditorDisplay_ToggleHandler()
+        {
+            if((toggleObjectToRotate || toggleAngleRotation || toggleTimeToRotate) && !(toggleObjectToRotate && toggleAngleRotation && toggleTimeToRotate))      //if one sub toogle is set to true show mixed value
+            {           
                 bool toggle = toggleRotationSettings;
                 EditorGUI.showMixedValue = true;
                 toggleRotationSettings = EditorGUILayout.Toggle(toggleRotationSettings,GUILayout.ExpandWidth(false),GUILayout.Width(15));
                 toggleRotationSettingsChanged = toggle != toggleRotationSettings ? true : false;
                 EditorGUI.showMixedValue = false;
             }
-            else if(!toggleRotationSettings && toggleObjectToRotate && toggleAngleRotation && toggleTimeToRotate){                                                      //if all 3 sub toggle are set to true set this to true
+            else if(!toggleRotationSettings && toggleObjectToRotate && toggleAngleRotation && toggleTimeToRotate)                   //if all 3 sub toggle are set to true set this to true
+            {                                                      
                 toggleRotationSettings = EditorGUILayout.Toggle(true,GUILayout.ExpandWidth(false),GUILayout.Width(15));
             }   
-            else{                                                                                                                                                       //else if non is set to true set it to the value of the toggle
+            else                                                                                                                    //else if non is set to true set it to the value of the toggle
+            {                                                                                                                                                       
                 bool toggle = toggleRotationSettings;
                 toggleRotationSettings = EditorGUILayout.Toggle(toggleRotationSettings,GUILayout.ExpandWidth(false),GUILayout.Width(15));
                 toggleRotationSettingsChanged = toggle != toggleRotationSettings ? true : false;
@@ -164,13 +176,14 @@ namespace com.technical.test
         void EditorDisplay_ObjectToRotate()
         {
             GUILayout.BeginHorizontal();
-            if(toggleRotationSettingsChanged){
+            if(toggleRotationSettingsChanged)
+            {
                 toggleObjectToRotate = EditorGUILayout.Toggle(toggleRotationSettings,GUILayout.ExpandWidth(false),GUILayout.Width(25));
             }
-            else{
+            else
+            {
                 toggleObjectToRotate = EditorGUILayout.Toggle(toggleObjectToRotate,GUILayout.ExpandWidth(false),GUILayout.Width(25));
             }
-            
             EditorGUIUtility.labelWidth = 220;
             objectToRotateValue = EditorGUILayout.ObjectField("Object to Rotate",objectToRotateValue,typeof(Transform),true) as Transform;
             GUILayout.EndHorizontal();
@@ -178,10 +191,12 @@ namespace com.technical.test
         void EditorDisplay_AngleRotation()
         {
             GUILayout.BeginHorizontal();
-            if(toggleRotationSettingsChanged){
+            if(toggleRotationSettingsChanged)
+            {
                 toggleAngleRotation = EditorGUILayout.Toggle(toggleRotationSettings,GUILayout.ExpandWidth(false),GUILayout.Width(25));
             }
-            else{
+            else
+            {
                 toggleAngleRotation = EditorGUILayout.Toggle(toggleAngleRotation,GUILayout.ExpandWidth(false),GUILayout.Width(25));
             }
             EditorGUIUtility.labelWidth = 220;
@@ -191,10 +206,12 @@ namespace com.technical.test
         void EditorDisplay_TimeToRotate()
         {
             GUILayout.BeginHorizontal();
-            if(toggleRotationSettingsChanged){
+            if(toggleRotationSettingsChanged)
+            {
                 toggleTimeToRotate = EditorGUILayout.Toggle(toggleRotationSettings,GUILayout.ExpandWidth(false),GUILayout.Width(25));
             }
-            else{
+            else
+            {
                 toggleTimeToRotate = EditorGUILayout.Toggle(toggleTimeToRotate,GUILayout.ExpandWidth(false),GUILayout.Width(25));
             }
             
@@ -205,60 +222,25 @@ namespace com.technical.test
         }
         void EditorValidateChanges()
         {
-            if(GUILayout.Button("VALIDATE CHANGES"))
-            {
-                ApplySettings();
-            }
-        }
-        void Display_SelectedRotators(){
-            int rotatorPerLine = Mathf.FloorToInt(EditorGUIUtility.currentViewWidth / 360);
-            int rotatorOnLine = 0;
-            GUILayout.BeginVertical("box");
-            EditorGUILayout.LabelField("SELECTED ROTATORS",titleCenter);
-            selectedRotatorsScrollbarPosition = GUILayout.BeginScrollView(selectedRotatorsScrollbarPosition);
+            button = new GUIStyle(GUI.skin.button);
+            button.normal.background = MakeTex(new Color(180/255f,70/255f,70/255f));
+            button.hover.background = MakeTex(new Color(100/255f,30/255f,30/255f));
+            button.active.background = MakeTex(new Color(160/255f,70/255f,70/255f));
+            button.fontStyle = FontStyle.Bold;
+            GUILayout.BeginVertical();
             GUILayout.BeginHorizontal();
-            foreach(Rotator rotator in rotatorToEdit)
-            {
-                if(rotatorOnLine < rotatorPerLine){
-                    rotatorOnLine++;
-                    Display_Rotator(rotator);
-                }
-                else{
-                    GUILayout.EndHorizontal();
-                    GUILayout.BeginHorizontal();
-                    Display_Rotator(rotator);
-                    rotatorOnLine = 1;
-                }
-
-            }
-            
-            GUILayout.EndHorizontal();
-            GUILayout.EndScrollView();
-            GUILayout.EndVertical();
             GUILayout.FlexibleSpace();
-        }
-        void Display_Rotator(Rotator rotator){
-            GUILayout.BeginVertical("box");
-            SerializedObject so = new SerializedObject (rotator);
-            SerializedProperty identifierProperty = so.FindProperty("_identifier");
-            SerializedProperty timeBeforeStoppingProperty = so.FindProperty("_timeBeforeStoppingInSeconds");
-            SerializedProperty reverseRotationProperty = so.FindProperty("_shouldReverseRotation");
-            SerializedProperty rotationsSettingsProperty = so.FindProperty("_rotationsSettings");
-            EditorGUIUtility.labelWidth = 200;
-            EditorGUILayout.LabelField(rotator.gameObject.name,textBold,GUILayout.ExpandWidth(false),GUILayout.Width(175));
-            EditorGUIUtility.labelWidth = 80;
-            EditorGUILayout.PropertyField(identifierProperty, false,GUILayout.ExpandWidth(false),GUILayout.Width(255));
-            EditorGUIUtility.labelWidth = 200;
-            EditorGUILayout.PropertyField(timeBeforeStoppingProperty, false,GUILayout.ExpandWidth(false));
-            EditorGUIUtility.labelWidth = 170;
-            EditorGUILayout.PropertyField(reverseRotationProperty, false,GUILayout.ExpandWidth(false));
-            EditorGUILayout.PropertyField(rotationsSettingsProperty,true,GUILayout.ExpandWidth(false)); 
-            EditorGUIUtility.labelWidth = 0;
+            if(GUILayout.Button("VALIDATE CHANGES",button,GUILayout.Width(150),GUILayout.Height(30)))
+            {
+                EditorApplySettings();
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
             GUILayout.EndVertical();
-            
-        }
 
-        void ApplySettings()
+        }
+        
+        void EditorApplySettings()
         {
             foreach(Rotator rotator in rotatorToEdit)
             {
@@ -308,6 +290,57 @@ namespace com.technical.test
                 so.ApplyModifiedProperties();
             }
         }
+        void DisplaySelectedRotators()
+        {
+            int rotatorPerLine = Mathf.FloorToInt(EditorGUIUtility.currentViewWidth / 360);
+            int rotatorOnLine = 0;
+            GUILayout.BeginVertical("box",GUILayout.MinHeight(190),GUILayout.MaxHeight(10000));
+            EditorGUILayout.LabelField("SELECTED ROTATORS",titleCenter);
+            selectedRotatorsScrollbarPosition = GUILayout.BeginScrollView(selectedRotatorsScrollbarPosition);
+            GUILayout.BeginHorizontal();
+            foreach(Rotator rotator in rotatorToEdit)
+            {
+                if(rotatorOnLine < rotatorPerLine)
+                {
+                    rotatorOnLine++;
+                    Display_Rotator(rotator);
+                }
+                else
+                {
+                    GUILayout.EndHorizontal();
+                    GUILayout.BeginHorizontal();
+                    Display_Rotator(rotator);
+                    rotatorOnLine = 1;
+                }
+
+            }
+            GUILayout.EndHorizontal();
+            GUILayout.EndScrollView();
+            GUILayout.EndVertical();
+            GUILayout.FlexibleSpace();
+        }
+        void Display_Rotator(Rotator rotator)
+        {
+            GUILayout.BeginVertical("box");
+            SerializedObject so = new SerializedObject (rotator);
+            SerializedProperty identifierProperty = so.FindProperty("_identifier");
+            SerializedProperty timeBeforeStoppingProperty = so.FindProperty("_timeBeforeStoppingInSeconds");
+            SerializedProperty reverseRotationProperty = so.FindProperty("_shouldReverseRotation");
+            SerializedProperty rotationsSettingsProperty = so.FindProperty("_rotationsSettings");
+            EditorGUIUtility.labelWidth = 200;
+            EditorGUILayout.LabelField(rotator.gameObject.name,textBold,GUILayout.ExpandWidth(false),GUILayout.Width(175));
+            EditorGUIUtility.labelWidth = 80;
+            EditorGUILayout.PropertyField(identifierProperty, false,GUILayout.ExpandWidth(false),GUILayout.Width(255));
+            EditorGUIUtility.labelWidth = 200;
+            EditorGUILayout.PropertyField(timeBeforeStoppingProperty, false,GUILayout.ExpandWidth(false));
+            EditorGUIUtility.labelWidth = 170;
+            EditorGUILayout.PropertyField(reverseRotationProperty, false,GUILayout.ExpandWidth(false));
+            EditorGUILayout.PropertyField(rotationsSettingsProperty,true,GUILayout.ExpandWidth(false)); 
+            EditorGUIUtility.labelWidth = 0;
+            GUILayout.EndVertical();
+            
+        }
+
         Texture2D MakeTex(Color col)
         {
         Color[] pix = new Color[1*1];
